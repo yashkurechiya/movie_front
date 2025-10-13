@@ -18,6 +18,7 @@ import Show from './pages/Show'
 import Chatbot from './components/ChatBot'
 import MobChat from './pages/MobChat'
 import Register from './pages/Register'
+import TheaterTiming from './components/TheaterTiming'
  
 
 const App = () => {
@@ -31,6 +32,7 @@ const App = () => {
       { !isAdminRoute && <Navbar />}
       <Routes>
         <Route path='/theaters' element={<Theater />} />
+        <Route path='/th' element={<TheaterTiming />}/>
         <Route path='/theaters/:id' element={<Released />}/>
         <Route path='/show' element={<Show />}/>
         <Route path='/chat' element={<MobChat />} />

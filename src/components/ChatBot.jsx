@@ -42,7 +42,7 @@ const Chatbot = () => {
           {/* Header */}
           <div className="flex items-center justify-between p-4 bg-black/40 backdrop-blur-md rounded-t-2xl">
             <h1 className="font-bold text-lg flex items-center gap-2">
-              🎬 Movie Assistant
+               Movie Assistant
             </h1>
             <X
               className="cursor-pointer hover:text-red-400 transition"
@@ -103,7 +103,7 @@ const Chatbot = () => {
           onClick={() => setOpen(true)}
         >
           <img
-            src="../../src/assets/film-slate.png"
+            src="https://cdn-icons-png.flaticon.com/128/705/705062.png"
             alt="chatbot"
             className="w-15 h-15"
           />
