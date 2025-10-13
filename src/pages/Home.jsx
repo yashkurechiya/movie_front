@@ -40,7 +40,10 @@ const Dashboard = () => {
 
       <div className=' fixed right-20 bottom-20 z-20 h-10'>
 
+    <div className='hidden lg:flex'>
+
       <Chatbot />
+    </div>
       </div>
 
       <Footer />
