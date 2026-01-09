@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Menu, Search, Home, Film, Tv, LogOut, LogIn, BotIcon } from "lucide-react"
+import { Menu, Search, Home, Film, Tv, LogOut, LogIn, BotIcon, User } from "lucide-react"
 import { Link, useNavigate } from 'react-router-dom'
 
 const Navbar = () => {
@@ -51,10 +51,10 @@ const Navbar = () => {
 
         {/* Search + Auth */}
         <div className="flex items-center gap-4">
-          
-          
+
+
           {isLoggedIn ? (
-            <button 
+            <button
               onClick={handleLogout}
               className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full font-semibold shadow-md transition-all"
             >
@@ -80,11 +80,11 @@ const Navbar = () => {
 
         <Link to="/movies" className="flex flex-col items-center gap-1">
           <Film size={22} />
-          <span className="text-xs">MOvie</span>
+          <span className="text-xs">Movie</span>
         </Link>
 
         <Link to="/profile" className="flex flex-col items-center gap-1">
-          <Tv size={22} />
+          <User size={22} />
           <span className="text-xs">Profile</span>
         </Link>
         <Link to="/chat" className="flex flex-col items-center gap-1">
@@ -95,7 +95,7 @@ const Navbar = () => {
         {isLoggedIn ? (
           <button onClick={handleLogout} className="flex flex-col items-center gap-1">
             <LogOut size={22} />
-            <span className="text-xs">Logout</span>
+            <span className="text-xs">LogOut</span>
           </button>
         ) : (
           <Link to="/login" className="flex flex-col items-center gap-1">

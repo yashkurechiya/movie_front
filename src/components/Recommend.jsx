@@ -13,7 +13,6 @@ const Recommend = ({title}) => {
   const getShow = async () => {
     try {
       const res = await api.get("/getmovie")
-      console.log(res.data.movies);
       setShow(res.data.movies);
 
     } catch (error) {

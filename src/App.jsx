@@ -20,6 +20,7 @@ import Movies from './pages/Movies'
 import TheaterM from './components/TheaterM'
 import ShowTime from './components/ShowTime'
 import Profile from './pages/Profile'
+import Footer from './components/Footer'
  
 
 const App = () => {
@@ -47,6 +48,7 @@ const App = () => {
 
         {/* <Route path='' /> */}
       </Routes>
+      <Footer />
       
     </>
   )

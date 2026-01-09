@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Send } from "lucide-react";
+import api from "../api/axios";
 
 const MobChat = () => {
   const [messages, setMessages] = useState([
@@ -8,7 +9,7 @@ const MobChat = () => {
   ]);
   const [input, setInput] = useState("");
 
-  const backend = import.meta.env.VITE_BACKEND_URI;
+
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -17,7 +18,7 @@ const MobChat = () => {
     setMessages((prev) => [...prev, { sender: "user", text: input }]);
 
     try {
-      const res = await axios.post(`${backend}/api/videos/chat`, {
+       const res = await api.post("/chat/msg", {
         messages: input,
       });
 

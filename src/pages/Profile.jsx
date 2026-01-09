@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const handleDelete = async (ticketId) => {
   try {
@@ -31,6 +33,11 @@ const Profile = () => {
         setLoading(false);
       }
     };
+
+    const token = localStorage.getItem("token");
+    
+    if(!token)
+      navigate('/login');
 
     fetchBookings();
   }, []);
