@@ -4,6 +4,7 @@ import { Mail, Lock, Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
 import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -20,49 +21,51 @@ const Register = () => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   setError("");
-  setSuccess("");
-
-  if (!username || !email || !password) {
-    return setError("All fields are required.");
-  }
-
-  const emailOk = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/.test(email);
-  if (!emailOk) return setError("Please enter a valid email.");
 
   try {
     setLoading(true);
 
-    const res = await fetch(`${backend}/api/user/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, email, password })
-    });
+    // IMPORTANT: clear old token before register
+    localStorage.removeItem("token");
 
-    const data = await res.json(); // parse JSON
+    const res = await api.post(
+      "/user/register",
+      { username, email, password },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    if (!res.ok) {
+    const data = res.data;
+    console.log("REGISTER RESPONSE:", data);
+
+    // ✅ ONLY store token if success === true
+    if (data.success && data.token) {
+      localStorage.setItem("token", data.token);
+      // navigate("/") optional
+    } else {
+      console.log(data.message);
       throw new Error(data.message || "Registration failed");
+      
     }
+    navigate('/');
 
-    setSuccess(`Registration successful! Welcome, ${data.username}`);
-    localStorage.setItem("token", data.token);
-
-    // Clear form
-    setUsername("");
-    setEmail("");
-    setPassword("");
   } catch (err) {
-    setError(err.message || "Registration failed");
+    console.error("REGISTER ERROR:", err.response?.data || err.message);
+    setError(err.response?.data?.message || err.message || "Registration failed");
   } finally {
     setLoading(false);
   }
 };
+
 useEffect(()=>{
     if(localStorage.getItem('token'))
     {
         navigate('/');
     }
-})
+},[navigate])
 
 
   return (

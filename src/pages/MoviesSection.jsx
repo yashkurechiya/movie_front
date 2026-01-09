@@ -1,93 +1,65 @@
 import { ArrowRight } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import DramaCard from "../components/DramaCard";
-import axios from "axios";
+import api from "../api/axios";
+
+const categories = [
+  { title: "Bollywood Top Hits", key: "Bollywood" },
+  { title: "Love in Mandarin", key: "Drama" },
+  { title: "A Binge of Beasts", key: "Beast" },
+];
 
 const MoviesSection = () => {
-  const backend = import.meta.env.VITE_BACKEND_URI;
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleData = async () => {
+  const fetchMovies = async () => {
     try {
-      const response = await axios.get(`${backend}/api/videos/`);
-      console.log(response.data);
-      setData(response.data);
+      const res = await api.get("/videos");
+      setData(res.data);
+      
     } catch (error) {
-      console.log(error.message);
+      console.error("Failed to fetch movies:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    handleData();
+    fetchMovies();
   }, []);
+
+  if (loading) {
+    return <p className="text-center text-gray-400">Loading movies...</p>;
+  }
 
   return (
     <>
-      {/* Bollywood Section */}
-      <div className="px-4 sm:px-8 md:px-12 lg:px-20">
-        <p className="text-lg sm:text-xl md:text-2xl font-bold flex items-center gap-2 p-3 sm:p-5">
-          Bollywood Top Hits <ArrowRight size={20} />
-        </p>
+      {categories.map((cat) => (
+        <div
+          key={cat.key}
+          className="px-4 sm:px-8 md:px-12 lg:px-20"
+        >
+          <p className="text-lg sm:text-xl md:text-2xl font-bold flex items-center gap-2 p-3 sm:p-5">
+            {cat.title} <ArrowRight size={20} />
+          </p>
 
-        <div className="flex flex-row gap-4 overflow-x-auto scrollbar-hide p-3 sm:p-5">
-          {data
-            .filter((d) => d.category === "Bollywood")
-            .map((d, index) => (
-              <DramaCard
-                key={index}
-                thumbnailImg={d.thumbnailImg}
-                title={d.title}
-                underImg={d.underImg}
-                description={d.description}
-                id={d._id}
-              />
-            ))}
+          <div className="flex flex-row gap-4 overflow-x-auto scrollbar-hide p-3 sm:p-5">
+            {data
+              .filter((movie) => movie.category === cat.key)
+              .map((movie) => (
+                <DramaCard
+                  key={movie._id}
+                  thumbnailImg={movie.thumbnailImg}
+                  title={movie.title}
+                  underImg={movie.underImg}
+                  description={movie.description}
+                  id={movie._id}
+                />
+              ))}
+          </div>
         </div>
-      </div>
-
-      {/* Drama Section */}
-      <div className="px-4 sm:px-8 md:px-12 lg:px-20">
-        <p className="text-lg sm:text-xl md:text-2xl font-bold flex items-center gap-2 p-3 sm:p-5">
-          Love in Mandarin <ArrowRight size={20} />
-        </p>
-
-        <div className="flex flex-row gap-4 overflow-x-auto scrollbar-hide p-3 sm:p-5">
-          {data
-            .filter((d) => d.category === "Drama")
-            .map((d, index) => (
-              <DramaCard
-                key={index}
-                thumbnailImg={d.thumbnailImg}
-                title={d.title}
-                underImg={d.underImg}
-                description={d.description}
-                id={d._id}
-              />
-            ))}
-        </div>
-      </div>
-
-      {/* Beast Section */}
-      <div className="px-4 sm:px-8 md:px-12 lg:px-20">
-        <p className="text-lg sm:text-xl md:text-2xl font-bold flex items-center gap-2 p-3 sm:p-5">
-          A Binge of Beasts <ArrowRight size={20} />
-        </p>
-
-        <div className="flex flex-row gap-4 overflow-x-auto scrollbar-hide p-3 sm:p-5">
-          {data
-            .filter((d) => d.category === "Beast")
-            .map((d, index) => (
-              <DramaCard
-                key={index}
-                thumbnailImg={d.thumbnailImg}
-                title={d.title}
-                underImg={d.underImg}
-                description={d.description}
-                id={d._id}
-              />
-            ))}
-        </div>
-      </div>
+      ))}
     </>
   );
 };

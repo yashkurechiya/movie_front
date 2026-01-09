@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { X, Send, Bot, User } from "lucide-react";
+import api from "../api/axios";
 
 const Chatbot = () => {
   const [open, setOpen] = useState(false);
@@ -17,7 +18,7 @@ const Chatbot = () => {
     setMessages((prev) => [...prev, { sender: "user", text: input }]);
 
     try {
-      const res = await axios.post(`${backend}/api/videos/chat`, {
+      const res = await api.post("/chat/msg", {
         messages: input,
       });
 
@@ -38,7 +39,7 @@ const Chatbot = () => {
   return (
     <>
       {open ? (
-        <div className="fixed bottom-15 right-15 w-80 sm:w-96 h-[450px] bg-gradient-to-t from-black via-gray-900 to-blue-600 text-white rounded-2xl shadow-2xl flex flex-col animate-fadeIn">
+        <div className="fixed bottom-15 right-15 w-80 sm:w-96 h-[450px] bg-gradient-to-t from-black via-gray-900 to-red-600 text-white rounded-2xl shadow-2xl flex flex-col animate-fadeIn">
           {/* Header */}
           <div className="flex items-center justify-between p-4 bg-black/40 backdrop-blur-md rounded-t-2xl">
             <h1 className="font-bold text-lg flex items-center gap-2">
@@ -60,12 +61,12 @@ const Chatbot = () => {
                 }`}
               >
                 {msg.sender === "bot" && (
-                  <Bot className="text-blue-400 mt-1 shrink-0" size={18} />
+                  <Bot className="text-red-400 mt-1 shrink-0" size={18} />
                 )}
                 <div
                   className={`px-4 py-2 rounded-2xl max-w-[70%] text-sm ${
                     msg.sender === "user"
-                      ? "bg-blue-500 text-white rounded-br-none"
+                      ? "bg-red-500 text-white rounded-br-none"
                       : "bg-white/90 text-black rounded-bl-none"
                   }`}
                 >
@@ -81,7 +82,7 @@ const Chatbot = () => {
           {/* Input */}
           <div className="p-3 flex items-center gap-2 border-t border-gray-700 bg-black/40 backdrop-blur-md rounded-b-2xl">
             <input
-              className="flex-1 bg-gray-800 text-white px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="flex-1 bg-gray-800 text-white px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -90,7 +91,7 @@ const Chatbot = () => {
             />
             <button
               onClick={sendMessage}
-              className="bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-full transition flex items-center justify-center"
+              className="bg-red-500 hover:bg-red-600 px-3 py-2 rounded-full transition flex items-center justify-center"
             >
               <Send size={18} />
             </button>

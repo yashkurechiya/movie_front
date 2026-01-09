@@ -39,7 +39,7 @@ const MobChat = () => {
     <div className="flex flex-col h-screen w-full bg-gray-900 text-white">
       {/* Header */}
       <header className="bg-black py-4 text-center shadow-md">
-        <h1 className="text-lg sm:text-xl font-semibold">🎬 Ask Anything</h1>
+        <h1 className="text-lg sm:text-xl font-semibold"> Movie Assistant</h1>
       </header>
 
       {/* Chat Box */}
@@ -50,7 +50,7 @@ const MobChat = () => {
             className={`max-w-[75%] p-3 rounded-2xl ${
               msg.sender === "user"
                 ? "ml-auto bg-white text-black rounded-br-none"
-                : "mr-auto bg-blue-600 text-white rounded-bl-none"
+                : "mr-auto bg-red-600 text-white rounded-bl-none"
             }`}
           >
             {msg.text}
@@ -70,7 +70,7 @@ const MobChat = () => {
         />
         <button
           onClick={sendMessage}
-          className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg flex items-center gap-1 transition"
+          className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg flex items-center gap-1 transition"
         >
           <Send size={18} /> <span className="hidden sm:inline">Send</span>
         </button>

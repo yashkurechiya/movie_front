@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 
-const DramaCard = ({ thumbnailImg, underImg, title, description, id }) => {
+const MCard = ({ thumbnailImg, underImg, title, description, id }) => {
   const [hovered, setHovered] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const timerRef = useRef(null);
@@ -23,11 +23,11 @@ const DramaCard = ({ thumbnailImg, underImg, title, description, id }) => {
   };
 
   return (
-    <Link to={`/videos/${id}`}>
+    <Link to={`/movies/${id}`}>
       <div
         className="
           relative cursor-pointer 
-          w-36 h-52   /* default (mobile) */
+          w-30 h-50   /* default (mobile) */
           sm:w-44 sm:h-60  /* tablets */
           md:w-48 md:h-64  /* medium screens */
           lg:w-56 lg:h-72  /* large screens */
@@ -67,7 +67,7 @@ const DramaCard = ({ thumbnailImg, underImg, title, description, id }) => {
                 {description}
               </p>
               <div className="flex flex-wrap gap-3 mt-4">
-                <button className="px-3 sm:px-4 py-2 bg-red-600 rounded-lg text-xs sm:text-sm hover:bg-red-700 transition">
+                <button className="px-3 sm:px-4 py-2 bg-blue-600 rounded-lg text-xs sm:text-sm hover:bg-red-700 transition">
                   ▶ Play
                 </button>
                 <button className="px-3 sm:px-4 py-2 bg-gray-700 rounded-lg text-xs sm:text-sm hover:bg-gray-600 transition">
@@ -82,4 +82,4 @@ const DramaCard = ({ thumbnailImg, underImg, title, description, id }) => {
   );
 };
 
-export default DramaCard;
+export default MCard;

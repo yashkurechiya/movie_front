@@ -1,71 +1,84 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff, Loader2, ArrowRight, Github, Chrome } from "lucide-react";
+import {
+  User,
+  Lock,
+  Eye,
+  EyeOff,
+  Loader2,
+  ArrowRight,
+  Github,
+  Chrome
+} from "lucide-react";
+import axios from "axios";
+import api from "../api/axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  // Prefill email if remembered
-  useEffect(() => {
-    const savedEmail = localStorage.getItem("login_email");
-    if (savedEmail) setEmail(savedEmail);
-  }, []);
-
-  const backend = import.meta.env.VITE_BACKEND_URI || "";
+  // const backend = import.meta.env.VITE_BACKEND_URI || "";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // Basic validation
-    if (!email || !password) {
-      return setError("Please enter email and password.");
+    if (!username || !password) {
+      return setError("Please enter username and password.");
     }
-    const emailOk = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/.test(email);
-    if (!emailOk) return setError("Please enter a valid email address.");
 
     try {
       setLoading(true);
-      // Remember email
-      if (remember) localStorage.setItem("login_email", email);
-      else localStorage.removeItem("login_email");
 
-      // POST to your backend (adjust path if needed)
-      const res = await fetch(`${backend}/api/user/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
+      const res = await api.post("/user/login", {
+        username,
+        password
+      },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          }
+        }
+      );
 
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Login failed");
+      console.log(res);
+      
+
+      const data = res.data;
+      console.log("LOGIN RESPONSE:", data);
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
       }
 
-      // Save token (if returned)
-      if (data.token) localStorage.setItem("token", data.token);
-      // Redirect example
-      window.location.href = "/";
+      // optional redirect
+      navigate("/");
     } catch (err) {
-      setError(err.message || "Something went wrong");
+      setError(
+        err.response?.data?.message || "Login failed"
+      );
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
   const fillDemo = () => {
-    setEmail("demo@example.com");
+    setUsername("demoUser");
     setPassword("demopassword");
   };
 
+  
+
   return (
     <div className="relative min-h-screen w-full py-20 overflow-hidden bg-gradient-to-br from-zinc-900 via-zinc-950 to-black text-white">
-      {/* Animated background orbs */}
+      {/* Background orbs */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 0.6, scale: 1 }}
@@ -87,7 +100,6 @@ const Login = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="grid w-full max-w-5xl grid-cols-1 overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_10px_60px_-15px_rgba(0,0,0,0.6)] backdrop-blur-xl md:grid-cols-2"
         >
-
           {/* Left panel */}
           <div className="relative hidden md:block">
             <img
@@ -101,18 +113,22 @@ const Login = () => {
                 <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
                 Secure Login
               </div>
-              <h2 className="text-3xl font-bold leading-tight">Welcome back 👋</h2>
+              <h2 className="text-3xl font-bold leading-tight">
+                Welcome back 👋
+              </h2>
               <p className="mt-2 max-w-sm text-sm text-white/70">
-                Sign in to continue discovering movies, trailers and your personalized watchlist.
+                Sign in to continue discovering movies and your bookings.
               </p>
             </div>
           </div>
 
-          {/* Right panel: form */}
+          {/* Right panel */}
           <div className="p-8 md:p-10">
             <div className="mb-8">
               <h3 className="text-2xl font-bold">Log in</h3>
-              <p className="mt-1 text-sm text-white/70">Enter your credentials to access your account.</p>
+              <p className="mt-1 text-sm text-white/70">
+                Enter your username and password.
+              </p>
             </div>
 
             {error && (
@@ -122,29 +138,28 @@ const Login = () => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Email */}
+              {/* Username */}
               <div>
-                <label htmlFor="email" className="mb-1 block text-sm text-white/80">
-                  Email
+                <label className="mb-1 block text-sm text-white/80">
+                  Username
                 </label>
-                <div className="group relative">
+                <div className="relative">
                   <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2">
-                    <Mail size={18} className="text-white/50" />
+                    <User size={18} className="text-white/50" />
                   </div>
                   <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-10 py-3 text-sm text-white placeholder-white/40 outline-none ring-0 transition focus:border-white/30 focus:bg-white/10"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="your_username"
+                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-10 py-3 text-sm text-white placeholder-white/40 outline-none transition focus:border-white/30 focus:bg-white/10"
                   />
                 </div>
               </div>
 
               {/* Password */}
               <div>
-                <label htmlFor="password" className="mb-1 block text-sm text-white/80">
+                <label className="mb-1 block text-sm text-white/80">
                   Password
                 </label>
                 <div className="relative">
@@ -152,45 +167,38 @@ const Login = () => {
                     <Lock size={18} className="text-white/50" />
                   </div>
                   <input
-                    id="password"
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-10 py-3 text-sm text-white placeholder-white/40 outline-none ring-0 transition focus:border-white/30 focus:bg-white/10"
+                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-10 py-3 text-sm text-white placeholder-white/40 outline-none transition focus:border-white/30 focus:bg-white/10"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((s) => !s)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-white/60 hover:text-white"
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
               </div>
 
-              {/* Extras */}
-              <div className="flex items-center justify-between">
-                <label className="flex items-center gap-2 text-xs text-white/70">
-                  <input
-                    type="checkbox"
-                    checked={remember}
-                    onChange={(e) => setRemember(e.target.checked)}
-                    className="h-4 w-4 rounded border-white/20 bg-white/10"
-                  />
-                  Remember me
-                </label>
-                <a href="/forgot" className="text-xs text-fuchsia-300 hover:text-fuchsia-200">
-                  Forgot password?
-                </a>
-              </div>
+              {/* Remember */}
+              <label className="flex items-center gap-2 text-xs text-white/70">
+                <input
+                  type="checkbox"
+                  checked={remember}
+                  onChange={(e) => setRemember(e.target.checked)}
+                />
+                Remember username
+              </label>
 
               {/* Submit */}
               <button
                 type="submit"
                 disabled={loading}
-                className="group relative flex w-full items-center justify-center gap-2 rounded-2xl bg-fuchsia-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-fuchsia-900/30 transition hover:bg-fuchsia-500 disabled:cursor-not-allowed disabled:opacity-70"
+                onClick={handleSubmit}
+                className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-fuchsia-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-fuchsia-500 disabled:opacity-70"
               >
                 {loading ? (
                   <>
@@ -200,39 +208,28 @@ const Login = () => {
                 ) : (
                   <>
                     Continue
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                    <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5" />
                   </>
                 )}
               </button>
 
-              {/* Divider */}
-              <div className="relative my-3 flex items-center justify-center">
-                <div className="h-px w-full bg-white/10" />
-                <span className="absolute bg-transparent px-3 text-xs text-white/40">or</span>
-              </div>
-
-              {/* Social buttons (placeholders) */}
-              <div className="grid grid-cols-2 gap-3">
-                <button type="button" className="flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/90 hover:bg-white/10">
-                  <Chrome size={16} /> Google
-                </button>
-                <button type="button" className="flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/90 hover:bg-white/10">
-                  <Github size={16} /> GitHub
-                </button>
-              </div>
-
-              {/* Demo fill */}
+              {/* Demo */}
               <button
                 type="button"
                 onClick={fillDemo}
-                className="mt-3 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-xs text-white/70 hover:bg-white/10"
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-xs text-white/70 hover:bg-white/10"
               >
                 Use demo credentials
               </button>
 
               <p className="mt-6 text-center text-xs text-white/60">
-                Don’t have an account? {" "}
-                <a href="/register" className="text-fuchsia-300 hover:text-fuchsia-200">Create one</a>
+                Don’t have an account?{" "}
+                <a
+                  href="/register"
+                  className="text-fuchsia-300 hover:text-fuchsia-200"
+                >
+                  Create one
+                </a>
               </p>
             </form>
           </div>

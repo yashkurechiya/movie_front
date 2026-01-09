@@ -22,6 +22,8 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token")
+    localStorage.removeItem("login_email")
+    localStorage.removeItem("login_username")
     setIsLoggedIn(false)
     navigate('/login')
   }
@@ -32,19 +34,19 @@ const Navbar = () => {
       <div
         className={`hidden md:flex w-full justify-between items-center px-10 py-4 
         fixed top-0 left-0 z-40 text-white transition-all duration-300
-        ${scr ? "bg-black shadow-lg" : "bg-transparent"}`}
+        ${scr ? "bg-black  shadow shadow-gray-800" : "bg-transparent"}`}
       >
         {/* Logo */}
         <h1 className="font-extrabold lg:text-2xl text-xl tracking-wide 
-        bg-gradient-to-r text-blue-500  bg-clip-text mx-5 cursor-pointer">
+        bg-gradient-to-r text-red-500  bg-clip-text mx-5 cursor-pointer">
           EpicShow
         </h1>
 
         {/* Nav Links */}
         <ul className="flex gap-6 px-6 py-2 bg-white/50 text-black backdrop-blur-md cursor-pointer rounded-full text-sm font-medium">
-          <Link to="/"><li className='hover:text-blue-500'>Home</li></Link>
-          <Link to="/theaters"><li className='hover:text-blue-500'>Theater</li></Link>
-          <Link to="/show"><li className='hover:text-blue-500'>Show</li></Link>
+          <Link to="/"><li className='hover:text-red-500'>Home</li></Link>
+          <Link to="/movies"><li className='hover:text-red-500'>Movie</li></Link>
+          <Link to="/profile"><li className='hover:text-red-500'>Profile</li></Link>
         </ul>
 
         {/* Search + Auth */}
@@ -54,12 +56,12 @@ const Navbar = () => {
           {isLoggedIn ? (
             <button 
               onClick={handleLogout}
-              className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full font-semibold shadow-md transition-all"
+              className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full font-semibold shadow-md transition-all"
             >
               Logout
             </button>
           ) : (
-            <Link to="/login" className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full font-semibold shadow-md transition-all">
+            <Link to="/login" className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full font-semibold shadow-md transition-all">
               Login
             </Link>
           )}
@@ -76,14 +78,14 @@ const Navbar = () => {
           <span className="text-xs">Home</span>
         </Link>
 
-        <Link to="/theaters" className="flex flex-col items-center gap-1">
+        <Link to="/movies" className="flex flex-col items-center gap-1">
           <Film size={22} />
-          <span className="text-xs">Theater</span>
+          <span className="text-xs">MOvie</span>
         </Link>
 
-        <Link to="/show" className="flex flex-col items-center gap-1">
+        <Link to="/profile" className="flex flex-col items-center gap-1">
           <Tv size={22} />
-          <span className="text-xs">Show</span>
+          <span className="text-xs">Profile</span>
         </Link>
         <Link to="/chat" className="flex flex-col items-center gap-1">
           <BotIcon size={22} />

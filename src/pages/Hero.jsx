@@ -84,7 +84,9 @@ const Hero = () => {
 
                 {/* Buttons */}
                 <div className="flex flex-wrap gap-3 sm:gap-4 mt-3 sm:mt-4">
-                  <button className="px-4 cursor-pointer sm:px-5 md:px-6 py-2 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-sm sm:text-base font-semibold shadow-lg transition-all">
+                  <button 
+                  disabled={true}
+                  className="px-4 cursor-pointer sm:px-5 md:px-6 py-2 sm:py-3 bg-red-600 hover:bg-red-700 text-white rounded-full text-sm sm:text-base font-semibold shadow-lg transition-all">
                     ▶ Watch Now
                   </button>
                   <button className="px-4 cursor-pointer sm:px-5 md:px-6 py-2 sm:py-3 bg-gray-800/70 hover:bg-gray-900 text-white rounded-full text-sm sm:text-base font-semibold shadow-lg transition-all">

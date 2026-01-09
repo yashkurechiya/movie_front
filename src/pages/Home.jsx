@@ -6,6 +6,7 @@ import axios from 'axios'
 import MoviesSection from './MoviesSection'
 import Chatbot from '../components/ChatBot'
 import Footer from '../components/Footer'
+import Recommend from '../components/Recommend'
 
 const Dashboard = () => {
 
@@ -37,13 +38,17 @@ const Dashboard = () => {
       <Hero />
       {/* <FeaturedSection /> */}
       <MoviesSection />
+      <div className='px-10'>
+
+        <Recommend title={"Movies in Cinema"} />
+      </div>
 
       <div className=' fixed right-20 bottom-20 z-20 h-10'>
 
-    <div className='hidden lg:flex'>
+        <div className='hidden lg:flex'>
 
-      <Chatbot />
-    </div>
+          <Chatbot />
+        </div>
       </div>
 
       <Footer />
