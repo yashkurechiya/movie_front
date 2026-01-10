@@ -151,7 +151,7 @@ const ShowTime = () => {
       }
     }
     );
-    toast.success("Enrollment successful!");
+    toast.success("Ticket Booked successful!");
     return { data: { success: true } };
 
   };
