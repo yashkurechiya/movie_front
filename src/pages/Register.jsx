@@ -16,17 +16,12 @@ const Register = () => {
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
-  const backend = import.meta.env.VITE_BACKEND_URI || "http://localhost:5000";
-
 const handleSubmit = async (e) => {
   e.preventDefault();
   setError("");
 
   try {
     setLoading(true);
-
-    // IMPORTANT: clear old token before register
-    localStorage.removeItem("token");
 
     const res = await api.post(
       "/user/register",
